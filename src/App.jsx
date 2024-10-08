@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import './App.css'
+import supabase from './utils/supabase'
+
 
 function App() {
+        console.log("supabase 222", supabase)
+
         const [studyContent, setStudyContent] = useState('');
         const [studyHour, setStudyHour] = useState(0);
         const [records, setRecords] = useState([]);
