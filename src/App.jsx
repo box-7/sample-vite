@@ -31,9 +31,20 @@ function App() {
         //         }
         // }, [data]);
 
+        const addTodo = async (title, time) => {
+                const { data, error } = await supabase
+                        .from("study-record")
+                        .insert([{ title: title, time: time }])
+                        .select();
+                if (error) {
+                        throw error;
+                }
+                return data;
+        };
+
         const [studyContent, setStudyContent] = useState('');
         const [studyHour, setStudyHour] = useState(0);
-        const [records, setRecords] = useState([]);
+        // const [records, setRecords] = useState([]);
         const [error, setError] = useState("");
         const handleChange = (e) => {
                 setStudyContent(e.target.value)
@@ -47,11 +58,12 @@ function App() {
                         return
                 }
                 setError('')
-                const newRecord = {title: studyContent, time: studyHour};
-                const updateRecords = ([...records, newRecord])
+                addTodo(studyContent, studyHour);
+                // const newRecord = {title: studyContent, time: studyHour};
+                // const updateRecords = ([...records, newRecord])
                 setStudyContent('')
                 setStudyHour(0)
-                setRecords(updateRecords)
+                // setRecords(updateRecords)
         };
 
         return (
@@ -63,11 +75,6 @@ function App() {
                         <p>入力されている学習時間: {studyHour}時間</p>
                         <button onClick={onClickSetRecord}>登録</button>
 
-                        {/* {records.map((record, index) => ( */}
-                        {/* {data?.map((record, index) => (
-                                <p  key={index}>{record.title} {record.time}時間</p>
-                        ))} */}
-
                         <div>
                                 {isLoading ? (
                                         <p>Loading...</p>
@@ -76,7 +83,7 @@ function App() {
                                         <div>
                                                 {/* データを表示する部分 */}
                                                 {data.map((record, index) => (
-                                                // <div key={item.id}>{item.name}</div>
+
                                                         <p  key={index}>{record.title} {record.time}時間</p>
                                                 ))}
                                         </div>
@@ -94,6 +101,13 @@ function App() {
 
 export default App
 
+
+                        // {/* {records.map((record, index) => ( */}
+                        // {/* {data?.map((record, index) => (
+                        //         <p  key={index}>{record.title} {record.time}時間</p>
+                        // ))} */}
+
+                                                // <div key={item.id}>{item.name}</div>
         // const totalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
 
         // console.log("data",data);
