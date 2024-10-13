@@ -17,19 +17,24 @@ function App() {
                                 console.error('Error fetching data:', error);
                         }
                 };
-                // fetchData();
-                fetchData().then(data => {
-                        const calculatedTotalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
-                        setTotalTime(calculatedTotalTime);
-                });
+                fetchData();
+                // fetchData().then(data => {
+                //         // reduce: 配列の各要素に対して処理を行い、最終的に一つの値を返すメソッド
+                //         // acc: 累積値を表します。初期値は0で、各要素を処理するたびにこの値に新しい値が加算される
+                //         // record: 配列の現在の要素を表す変数
+                //         // acc + parseInt(record.time): 現在の累積値accに、現在の要素のtimeの値を加算した新しい累積値を返す
+                //         // 0: reduceメソッドの第二引数で、初期値を指定
+                //         const calculatedTotalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
+                //         setTotalTime(calculatedTotalTime);
+                // });
         }, []);
 
-        // useEffect(() => {
-        //         if (data) {
-        //                 const calculatedTotalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
-        //                 setTotalTime(calculatedTotalTime);
-        //         }
-        // }, [data]);
+        useEffect(() => {
+                if (data) {
+                        const calculatedTotalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
+                        setTotalTime(calculatedTotalTime);
+                }
+        }, [data]);
 
         const addTodo = async (title, time) => {
                 const { data, error } = await supabase
@@ -39,19 +44,26 @@ function App() {
                 if (error) {
                         throw error;
                 }
+                // console.log("addTodo data",data);
                 return data;
         };
 
+        const handleDelete = async (id) => {
+                try {
+                        await supabase.from("study-record").delete().eq("id", id);
+                        const { data } = await supabase.from("study-record").select("*");
+                        // console.log("data",data);
+                        setData(data);
+                } catch (error) {
+                        alert(error.message);
+                }
+        }
+
         const [studyContent, setStudyContent] = useState('');
         const [studyHour, setStudyHour] = useState(0);
-        // const [records, setRecords] = useState([]);
         const [error, setError] = useState("");
-        const handleChange = (e) => {
-                setStudyContent(e.target.value)
-        };
-        const handleChangeHour = (e) => {
-                setStudyHour(e.target.value)
-        };
+        const handleChange = (e) => {setStudyContent(e.target.value)};
+        const handleChangeHour = (e) => {setStudyHour(e.target.value)};
         const onClickSetRecord = () => {
                 if (studyContent === '' || studyHour === '') {
                         setError('入力されていない項目があります')
@@ -59,16 +71,13 @@ function App() {
                 }
                 setError('')
                 addTodo(studyContent, studyHour);
-                // const newRecord = {title: studyContent, time: studyHour};
-                // const updateRecords = ([...records, newRecord])
                 setStudyContent('')
                 setStudyHour(0)
-                // setRecords(updateRecords)
         };
 
         return (
                 <>
-                        <h1>学習記録一覧</h1>
+                        <h1>学習記録一覧!</h1>
                         <p>学習内容<input type="text" value={studyContent} onChange={handleChange} /></p>
                         <p>学習時間<input type="number" value={studyHour} onChange={ handleChangeHour} /></p>
                         <p>入力されている学習内容: {studyContent}</p>
@@ -81,10 +90,12 @@ function App() {
                                 ) : (
                                         data && data.length > 0 ? (
                                         <div>
-                                                {/* データを表示する部分 */}
-                                                {data.map((record, index) => (
-
-                                                        <p  key={index}>{record.title} {record.time}時間</p>
+                                                {data.map((record) => (
+                                                        <p  key={record.id}>
+                                                                {record.title} {record.time}時間  <button onClick={() => handleDelete(record.id)}>削除</button>
+                                                                {/* {console.log("data",data)}
+                                                                {console.log("record.id",record.id)} */}
+                                                        </p>
                                                 ))}
                                         </div>
                                         ) : (
