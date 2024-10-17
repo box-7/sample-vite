@@ -9,10 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # リポジトリのコードをチェックアウト（クローン）するために使用される
       - uses: actions/checkout@v4
       - name: Set up Node.js
-        # GitHubが提供する公式のNode.jsセットアップアクションです。このアクションを使うことで、ワークフロー内でNode.js環境を整えることができる
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -21,12 +19,47 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    # GitHub Actionsのワークフロー内でジョブの依存関係を指定するために使用される
     needs: build
     steps:
       - uses: actions/checkout@v4
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+      - name: Debug Firebase CLI
+        run: firebase --version
       - name: Deploy to Production
         run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
+
+# name: Firebase Deploy
+
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       # リポジトリのコードをチェックアウト（クローン）するために使用される
+#       - uses: actions/checkout@v4
+#       - name: Set up Node.js
+#         # GitHubが提供する公式のNode.jsセットアップアクションです。このアクションを使うことで、ワークフロー内でNode.js環境を整えることができる
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
+#       - run: npm install
+#       - run: npm run build
+
+#   deploy:
+#     runs-on: ubuntu-latest
+#     # GitHub Actionsのワークフロー内でジョブの依存関係を指定するために使用される
+#     needs: build
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Install Firebase CLI
+#         run: npm install -g firebase-tools
+#       - name: Deploy to Production
+#         run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
 
 # name: Firebase Deploy
 
