@@ -77,7 +77,7 @@ function App() {
 
         return (
                 <>
-                        <h1>学習記録一覧!</h1>
+                        <h1>学習記録一覧! 777</h1>
                         <p>学習内容<input type="text" value={studyContent} onChange={handleChange} /></p>
                         <p>学習時間<input type="number" value={studyHour} onChange={ handleChangeHour} /></p>
                         <p>入力されている学習内容: {studyContent}</p>
