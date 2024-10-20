@@ -23,6 +23,11 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      - name: Upload build artifacts  # 追加
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: dist
 
   deploy:
     name: deploy
@@ -42,6 +47,11 @@ jobs:
         run: |
           echo "${{ secrets.FIREBASE_KEY }}" | base64 -d > ./firebase-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firebase-key.json" >> $GITHUB_ENV
+      - name: Download build artifacts  # 追加
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: dist
       - name: change space
         run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
       - name: Deploy to Firebase Hosting
