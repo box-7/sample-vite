@@ -59,18 +59,16 @@ jobs:
           name: build-artifacts
           path: dist
       - name: change space
-        run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
       - name: Deploy to Firebase Hosting
         run: |
-          ./node_modules/.bin/firebase deploy
+          firebase deploy
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-key.json
           FIREBASE_CLI_EXPERIMENTS: webframeworks
       - name: delete GOOGLE_APPLICATION_CREDENTIALS
         run: rm $GOOGLE_APPLICATION_CREDENTIALS
         if: ${{ always() }}
-
-
 
 
 # name: Firebase Deploy
