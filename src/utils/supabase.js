@@ -2,6 +2,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 // supabaseのHPのAPISettingsから、ProjectURLとAPI Keysを取得
+// vite.configにdefine: { 'process.env': process.env }が定義されていると、process.env.VITE_SUPABASE_URL;で環境変数を取得できる
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
