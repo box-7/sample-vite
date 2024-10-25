@@ -30,14 +30,14 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-      # アーティファクトをダウンロードする際に使用
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          # アップロードするアーティファクトの名前を指定。この名前は、後のステップでアーティファクトをダウンロードする際に使用される
-          name: build-artifacts
-          # アップロードするファイルやディレクトリのパスを指定。distディレクトリ内のすべてのファイルがアーティファクトとしてアップロードされる
-          path: dist
+      # # アーティファクトをダウンロードする際に使用
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     # アップロードするアーティファクトの名前を指定。この名前は、後のステップでアーティファクトをダウンロードする際に使用される
+      #     name: build-artifacts
+      #     # アップロードするファイルやディレクトリのパスを指定。distディレクトリ内のすべてのファイルがアーティファクトとしてアップロードされる
+      #     path: dist
 
   deploy:
     name: deploy
@@ -65,11 +65,11 @@ jobs:
         run: |
           echo "${{ secrets.FIREBASE_KEY }}" | base64 -d > ./firebase-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firebase-key.json" >> $GITHUB_ENV
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: dist
+      # - name: Download build artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: build-artifacts
+      #     path: dist
       # firebase useコマンドを実行して、指定されたFirebaseプロジェクトを使用するように設定
       # ./node_modules/.bin/firebaseは、プロジェクト内にインストールされたFirebase CLIを実行するためのパス
       - name: change space
