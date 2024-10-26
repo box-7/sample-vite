@@ -75,7 +75,6 @@ jobs:
       # $GITHUB_ENV: GitHub Actionsが提供する特殊な環境変数で、ここに書き込まれた内容はその後のステップで環境変数として利用される
         # GitHub Actions の環境変数ファイルのパスを指す
         # ジョブの実行中に環境変数を設定するために使用される
-      - name: Set up Firebase service account key
         run: |
           echo "${{ secrets.FIREBASE_KEY }}" | base64 -d > ./firebase-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firebase-key.json" >> $GITHUB_ENV
