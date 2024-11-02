@@ -1,6 +1,6 @@
 
 import { useState } from 'react'
-import './App.css'
+// import './App.css'
 import supabase from './utils/supabase'
 import { useEffect } from 'react'
 
