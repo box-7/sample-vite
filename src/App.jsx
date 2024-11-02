@@ -1,3 +1,19 @@
+
+// import React from "react";
+// function App() {
+// // data-testid属性はテスト専用の属性で、本番環境には影響を与えない
+// // ただし、本番ビルド時にdata-testid属性を削除することもできる
+// // 例えば、babel-plugin-react-remove-propertiesを使って本番ビルドからdata-testid属性を除去する
+//   return (
+//     <>
+//       <title data-testid="title">Hello Jest</title>
+//     </>
+//   );
+// }
+
+// export default App;
+
+
 import { useState } from 'react'
 import './App.css'
 import supabase from './utils/supabase'
@@ -77,9 +93,15 @@ function App() {
 
         return (
                 <>
-                        <h1>学習記録一覧! 7777</h1>
-                        <p>学習内容<input type="text" value={studyContent} onChange={handleChange} /></p>
-                        <p>学習時間<input type="number" value={studyHour} onChange={ handleChangeHour} /></p>
+                        <h1>学習記録一覧! 777</h1>
+                        <p>
+                                <label htmlFor="study-content">学習内容</label>
+                                <input id="study-content" type="text" value={studyContent} onChange={handleChange} />
+                        </p>
+                        <p>
+                                <label htmlFor="study-hour">学習時間</label>
+                                <input id="study-hour" type="number" value={studyHour} onChange={handleChangeHour} />
+                        </p>
                         <p>入力されている学習内容: {studyContent}</p>
                         <p>入力されている学習時間: {studyHour}時間</p>
                         <button onClick={onClickSetRecord}>登録</button>
@@ -113,15 +135,15 @@ function App() {
 export default App
 
 
-                        // {/* {records.map((record, index) => ( */}
-                        // {/* {data?.map((record, index) => (
-                        //         <p  key={index}>{record.title} {record.time}時間</p>
-                        // ))} */}
+//                         // {/* {records.map((record, index) => ( */}
+//                         // {/* {data?.map((record, index) => (
+//                         //         <p  key={index}>{record.title} {record.time}時間</p>
+//                         // ))} */}
 
-                                                // <div key={item.id}>{item.name}</div>
-        // const totalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
+//                                                 // <div key={item.id}>{item.name}</div>
+//         // const totalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
 
-        // console.log("data",data);
-        // console.log("supabase.fromの確認");
-        // const test = async supabase.from("study-record").select("*");
-        // console.log(test.data);
+//         // console.log("data",data);
+//         // console.log("supabase.fromの確認");
+//         // const test = async supabase.from("study-record").select("*");
+//         // console.log(test.data);
