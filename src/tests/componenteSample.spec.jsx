@@ -43,23 +43,20 @@ test('学習内容と学習時間が登録されることを確認する', () =>
 // });
 
 
-
 // describe("Title Test", () => {
 //         it("タイトルがHello Jestであること", () => {
 //           // testId(title)を指定して取得
 //           render(<App />);
 //           const inputElement = document.getElementById('study-content');
-      
-          
+
 //           const title = screen.getByTestId("title");
 //           expect(title).toHaveTextContent("Hello Jest");
 //         });
 //       });
-      
+
 
 // フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されている
 // 数が1つ増えていることをテストする
-
 
 // {
 //         "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],

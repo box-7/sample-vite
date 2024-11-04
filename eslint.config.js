@@ -18,6 +18,10 @@ export default [
       },
     },
     settings: { react: { version: '18.3' } },
+    globals: {
+        ...globals.browser,
+        ...globals.jest
+      },
     plugins: {
       react,
       'react-hooks': reactHooks,
