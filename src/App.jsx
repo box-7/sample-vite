@@ -8,16 +8,18 @@ function App() {
         const [data, setData] = useState(null);
         const [totalTime, setTotalTime] = useState(0);
         const [isLoading, setIsLoading] = useState(true);
+
+        const fetchData = async () => {
+                try {
+                        const { data } = await supabase.from('study-record').select('*');
+                        setData(data);
+                        setIsLoading(false);
+                } catch (error) {
+                        console.error('Error fetching data:', error);
+                }
+        };
+
         useEffect(() => {
-                const fetchData = async () => {
-                        try {
-                                const { data } = await supabase.from('study-record').select('*');
-                                setData(data);
-                                setIsLoading(false);
-                        } catch (error) {
-                                console.error('Error fetching data:', error);
-                        }
-                };
                 fetchData();
                 // fetchData().then(data => {
                 //         // reduce: 配列の各要素に対して処理を行い、最終的に一つの値を返すメソッド
@@ -32,6 +34,7 @@ function App() {
 
         useEffect(() => {
                 if (data) {
+                        console.log('Fetched data:', data); // データをコンソールに出力
                         const calculatedTotalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
                         setTotalTime(calculatedTotalTime);
                 }
@@ -41,10 +44,11 @@ function App() {
                 const { data, error } = await supabase
                         .from("study-record")
                         .insert([{ title: title, time: time }])
-                        .select();
+                        // .select();
                 if (error) {
                         throw error;
                 }
+                fetchData(); // データを再取得して状態を更新
                 // console.log("addTodo data",data);
                 return data;
         };
@@ -52,9 +56,10 @@ function App() {
         const handleDelete = async (id) => {
                 try {
                         await supabase.from("study-record").delete().eq("id", id);
-                        const { data } = await supabase.from("study-record").select("*");
-                        // console.log("data",data);
-                        setData(data);
+                        // const { data } = await supabase.from("study-record").select("*");
+                        // // console.log("data",data);
+                        // setData(data);
+                        fetchData();
                 } catch (error) {
                         alert(error.message);
                 }
@@ -65,13 +70,15 @@ function App() {
         const [error, setError] = useState("");
         const handleChange = (e) => {setStudyContent(e.target.value)};
         const handleChangeHour = (e) => {setStudyHour(e.target.value)};
-        const onClickSetRecord = () => {
+        const onClickSetRecord = async () => {
                 if (studyContent === '' || studyHour === '') {
                         setError('入力されていない項目があります')
                         return
                 }
                 setError('')
-                addTodo(studyContent, studyHour);
+                await addTodo(studyContent, studyHour);
+                // 非同期なので、ここだとうまくいかない
+                // fetchData();
                 setStudyContent('')
                 setStudyHour(0)
         };
@@ -81,15 +88,15 @@ function App() {
                         <h1>学習記録一覧! 777</h1>
                         <p>
                                 <label htmlFor="study-content">学習内容</label>
-                                <input id="study-content" type="text" value={studyContent} onChange={handleChange} />
+                                <input data-testid="study-content"  id="study-content" type="text" value={studyContent} onChange={handleChange} />
                         </p>
                         <p>
                                 <label htmlFor="study-hour">学習時間</label>
-                                <input id="study-hour" type="number" value={studyHour} onChange={handleChangeHour} />
+                                <input  data-testid="study-hour"  id="study-hour" type="number" value={studyHour} onChange={handleChangeHour} />
                         </p>
                         <p>入力されている学習内容: {studyContent}</p>
                         <p>入力されている学習時間: {studyHour}時間</p>
-                        <button onClick={onClickSetRecord}>登録</button>
+                        <button  data-testid="add-record" onClick={onClickSetRecord}>登録</button>
 
                         <div>
                                 {isLoading ? (
@@ -98,10 +105,8 @@ function App() {
                                         data && data.length > 0 ? (
                                         <div>
                                                 {data.map((record) => (
-                                                        <p  key={record.id}>
+                                                        <p  data-testid="record" key={record.id}>
                                                                 {record.title} {record.time}時間  <button onClick={() => handleDelete(record.id)}>削除</button>
-                                                                {/* {console.log("data",data)}
-                                                                {console.log("record.id",record.id)} */}
                                                         </p>
                                                 ))}
                                         </div>

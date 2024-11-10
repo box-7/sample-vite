@@ -1,66 +1,52 @@
-import App from "../App";
-import React from "react";
-import '@testing-library/jest-dom'
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor, waitForElementToBeRemoved, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import App from '../App';
+import supabase from '../utils/supabase';
 
+test('新しいデータが正しく登録されるかを確認する', async () => {
+  render(<App />);
 
-test('学習内容と学習時間が登録されることを確認する', () => {
-        // コンポーネントをレンダリング
-        render(<App />);
+  await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
+  const records = await waitFor(() => screen.getAllByTestId('record'));
+  const recordCount = records.length;
 
-        // input要素を取得
-        const contentInputElement = screen.getByLabelText('学習内容');
-        const hourInputElement = screen.getByLabelText('学習時間');
-        // ボタン要素を取得
-        const buttonElement = screen.getByText('登録');
+  const inputFormStudyContent = await screen.getByTestId('study-content');
+  const inputFormStudyHour = await screen.getByTestId('study-hour');
 
-        // inputに値を入力
-        fireEvent.change(contentInputElement, { target: { value: 'test1' } });
-        fireEvent.change(hourInputElement, { target: { value: 2 } });
+  await act(async () => {
+    await userEvent.type(inputFormStudyContent, 'Test3');
+    await userEvent.type(inputFormStudyHour, '3');
 
-        // ボタンをクリック
-        fireEvent.click(buttonElement);
+    const addRecordButton = await screen.getByTestId('add-record');
+    await userEvent.click(addRecordButton);
+  });
 
-        // 登録された内容を確認（例として、登録された内容が表示されるdivを確認）
-        const registeredContent = screen.getByText('test1');
-        const registeredHour = screen.getByText('2');
-        expect(registeredContent).toBeInTheDocument();
-        expect(registeredHour).toBeInTheDocument();
-});
-
-
-// describe("Title Test", () => {
-//   it("タイトルがHello Jestであること", () => {
-//     // testId(title)を指定して取得
-//     render(<App />);
-//     const inputElement = document.getElementById('study-content');
-//     inputElement.value = 'test1';
-
-
-//     const title = screen.getByTestId("title");
-//     expect(title).toHaveTextContent("Hello Jest");
-//   });
-// });
-
-
-// describe("Title Test", () => {
-//         it("タイトルがHello Jestであること", () => {
-//           // testId(title)を指定して取得
-//           render(<App />);
-//           const inputElement = document.getElementById('study-content');
-
-//           const title = screen.getByTestId("title");
-//           expect(title).toHaveTextContent("Hello Jest");
-//         });
+    // 新しいレコードが追加されるのを待つ
+//     const test = await waitFor(() => {
+//         userEvent.type(inputFormStudyContent, 'Test3');
+//         userEvent.type(inputFormStudyHour, '3');
+    
+//         const addRecordButton = screen.getByTestId('add-record');
+//         userEvent.click(addRecordButton);
 //       });
 
 
-// フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されている
-// 数が1つ増えていることをテストする
+  // 新しいレコードが追加されるのを待つ
+  const newRecords = await waitFor(() => {
+    const elements = screen.getAllByTestId('record');
+    if (elements.length > recordCount) {
+      return elements;
+    }
+    return null;
+  });
 
-// {
-//         "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-//         "editor.codeActionsOnSave": {
-//           "source.fixAll.eslint": "true"
-//         }
-//       }
+    // デバッグ情報を出力
+    await screen.debug();
+
+
+  const newRecordCount = newRecords.length;
+
+//   console.log("newRecordCount", newRecordCount);
+
+  await expect(recordCount  + 1).toBe(newRecordCount);
+});
