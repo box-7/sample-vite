@@ -34,7 +34,6 @@ function App() {
 
         useEffect(() => {
                 if (data) {
-                        console.log('Fetched data:', data); // データをコンソールに出力
                         const calculatedTotalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
                         setTotalTime(calculatedTotalTime);
                 }
@@ -44,7 +43,7 @@ function App() {
                 const { data, error } = await supabase
                         .from("study-record")
                         .insert([{ title: title, time: time }])
-                        // .select();
+                        .select();
                 if (error) {
                         throw error;
                 }
@@ -123,37 +122,3 @@ function App() {
 }
 
 export default App
-
-
-
-
-// import React from "react";
-// function App() {
-// // data-testid属性はテスト専用の属性で、本番環境には影響を与えない
-// // ただし、本番ビルド時にdata-testid属性を削除することもできる
-// // 例えば、babel-plugin-react-remove-propertiesを使って本番ビルドからdata-testid属性を除去する
-//   return (
-//     <>
-//       <title data-testid="title">Hello Jest</title>
-//     </>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-//                         // {/* {records.map((record, index) => ( */}
-//                         // {/* {data?.map((record, index) => (
-//                         //         <p  key={index}>{record.title} {record.time}時間</p>
-//                         // ))} */}
-
-//                                                 // <div key={item.id}>{item.name}</div>
-//         // const totalTime = data.reduce((acc, record) => acc + parseInt(record.time), 0);
-
-//         // console.log("data",data);
-//         // console.log("supabase.fromの確認");
-//         // const test = async supabase.from("study-record").select("*");
-//         // console.log(test.data);
