@@ -27,7 +27,6 @@ describe('確認テスト', () => {
                         const newRecordCount = newRecords.length;
 
                         // console.log("newRecordCount", newRecordCount);
-
                         expect(recordCount + 1).toBe(newRecordCount);
                 });
         });
@@ -49,9 +48,28 @@ describe('確認テスト', () => {
                         const newRecords = screen.getAllByTestId('record');
                         const newRecordCount = newRecords.length;
 
-                        console.log("newRecordCount", newRecordCount);
+                        // console.log("newRecordCount", newRecordCount);
                         expect(recordCount - 1).toBe(newRecordCount);
                 });
+        });
+
+        test('未入力エラー確認テスト', async () => {
+                render(<App />);
+
+                await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
+
+                const inputFormStudyContent = await screen.getByTestId('study-content');
+                const inputFormStudyHour = await screen.getByTestId('study-hour');
+
+                await act(async () => {
+                        await userEvent.clear(inputFormStudyContent);
+                        await userEvent.type(inputFormStudyHour, '0');
+
+                        const addRecordButton = await screen.getByTestId('add-record');
+                        await userEvent.click(addRecordButton);
+                });
+
+                expect(screen.getByText('入力されていない項目があります')).toBeInTheDocument();
         });
 });
 
