@@ -105,7 +105,7 @@ function App() {
                                         <div>
                                                 {data.map((record) => (
                                                         <p  data-testid="record" key={record.id}>
-                                                                {record.title} {record.time}時間  <button onClick={() => handleDelete(record.id)}>削除</button>
+                                                                {record.title} {record.time}時間  <button data-testid="delete-button" onClick={() => handleDelete(record.id)}>削除</button>
                                                         </p>
                                                 ))}
                                         </div>

@@ -1,37 +1,59 @@
-import { render, screen, waitFor, waitForElementToBeRemoved, act } from '@testing-library/react';
+import { render, screen, waitFor, waitForElementToBeRemoved, act, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import supabase from '../utils/supabase';
 
-test('新しいデータが正しく登録されるかを確認する', async () => {
-        render(<App />);
+describe('確認テスト', () => {
+        test('投稿作成確認テスト', async () => {
+                render(<App />);
 
-        await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
-        const records = await waitFor(() => screen.getAllByTestId('record'));
-        const recordCount = records.length;
+                await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
+                const records = await waitFor(() => screen.getAllByTestId('record'));
+                const recordCount = records.length;
 
-        const inputFormStudyContent = await screen.getByTestId('study-content');
-        const inputFormStudyHour = await screen.getByTestId('study-hour');
+                const inputFormStudyContent = await screen.getByTestId('study-content');
+                const inputFormStudyHour = await screen.getByTestId('study-hour');
 
-        await act(async () => {
-                await userEvent.type(inputFormStudyContent, 'Test3');
-                await userEvent.type(inputFormStudyHour, '3');
+                await act(async () => {
+                        await userEvent.type(inputFormStudyContent, 'Test3');
+                        await userEvent.type(inputFormStudyHour, '3');
 
-                const addRecordButton = await screen.getByTestId('add-record');
-                await userEvent.click(addRecordButton);
+                        const addRecordButton = await screen.getByTestId('add-record');
+                        await userEvent.click(addRecordButton);
+                });
+
+                await waitFor(() => {
+                        const newRecords = screen.getAllByTestId('record');
+                        const newRecordCount = newRecords.length;
+
+                        // console.log("newRecordCount", newRecordCount);
+
+                        expect(recordCount + 1).toBe(newRecordCount);
+                });
         });
 
-        await waitFor(() => {
-                const newRecords = screen.getAllByTestId('record');
-                const newRecordCount = newRecords.length;
+        test('投稿削除確認テスト', async () => {
+                render(<App />);
 
-                console.log("newRecordCount", newRecordCount);
+                await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
+                const records = await waitFor(() => screen.getAllByTestId('record'));
+                const recordCount = records.length;
+                const lastRecord = records[records.length - 1];
 
-                // 新しいレコードが追加されたことを確認
-                expect(recordCount + 1).toBe(newRecordCount);
+                await act(async () => {
+                        const deleteRecordButton = await within(lastRecord).getByTestId('delete-button');
+                        await userEvent.click(deleteRecordButton);
+                });
+
+                await waitFor(() => {
+                        const newRecords = screen.getAllByTestId('record');
+                        const newRecordCount = newRecords.length;
+
+                        console.log("newRecordCount", newRecordCount);
+                        expect(recordCount - 1).toBe(newRecordCount);
+                });
         });
 });
-
 
         //     // 新しいレコードが追加されるのを待つ
         //     const test = await waitFor(() => {
