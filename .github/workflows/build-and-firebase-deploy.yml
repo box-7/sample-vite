@@ -10,9 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code # リポジトリのコードをチェックアウト（クローン）
+      - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set up Node.js # Node.js環境を整える
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -24,6 +24,8 @@ jobs:
         run: |
           if [ -z "${{ secrets.VITE_SUPABASE_URL }}" ]; then echo "VITE_SUPABASE_URL is not set"; else echo "VITE_SUPABASE_URL is set"; fi
           if [ -z "${{ secrets.VITE_SUPABASE_ANON_KEY }}" ]; then echo "VITE_SUPABASE_ANON_KEY is not set"; else echo "VITE_SUPABASE_ANON_KEY is set"; fi
+    - name: Run tests
+      run: npm run test
       # envで環境変数を設定
       # npm run build後に、distディレクトリが作成される(ローカルでも確認可能)
       - name: Run build
