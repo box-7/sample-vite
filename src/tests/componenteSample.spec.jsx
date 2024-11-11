@@ -8,13 +8,18 @@ describe('確認テスト', () => {
                 render(<App />);
 
                 await waitForElementToBeRemoved(() => screen.getByText('Loading...'), { timeout: 5000 });
-                const records = await waitFor(() => screen.getAllByTestId('record'));
-                const recordCount = records.length;
 
-                const inputFormStudyContent = await screen.getByTestId('study-content');
-                const inputFormStudyHour = await screen.getByTestId('study-hour');
+                let recordCount;
+
+                await waitFor(() => {
+                        const records = screen.getAllByTestId('record');
+                        recordCount = records.length;
+                });
 
                 await act(async () => {
+                        const inputFormStudyContent = await screen.getByTestId('study-content');
+                        const inputFormStudyHour = await screen.getByTestId('study-hour');
+
                         await userEvent.type(inputFormStudyContent, 'Test3');
                         await userEvent.type(inputFormStudyHour, '3');
 
@@ -35,9 +40,15 @@ describe('確認テスト', () => {
                 render(<App />);
 
                 await waitForElementToBeRemoved(() => screen.getByText('Loading...'), { timeout: 5000 });
-                const records = await waitFor(() => screen.getAllByTestId('record'));
-                const recordCount = records.length;
-                const lastRecord = records[records.length - 1];
+
+                let recordCount;
+                let lastRecord;
+
+                await waitFor(() => {
+                        const records = screen.getAllByTestId('record');
+                        recordCount= records.length;
+                        lastRecord = records[records.length - 1];
+                });
 
                 await act(async () => {
                         const deleteRecordButton = await within(lastRecord).getByTestId('delete-button');
@@ -72,6 +83,8 @@ describe('確認テスト', () => {
                 expect(screen.getByText('入力されていない項目があります')).toBeInTheDocument();
         });
 });
+
+
 
 
         //     // 新しいレコードが追加されるのを待つ
