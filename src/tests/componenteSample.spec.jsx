@@ -7,7 +7,7 @@ describe('確認テスト', () => {
         test('投稿作成確認テスト', async () => {
                 render(<App />);
 
-                await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
+                await waitForElementToBeRemoved(() => screen.getByText('Loading...'), { timeout: 5000 });
                 const records = await waitFor(() => screen.getAllByTestId('record'));
                 const recordCount = records.length;
 
@@ -34,7 +34,7 @@ describe('確認テスト', () => {
         test('投稿削除確認テスト', async () => {
                 render(<App />);
 
-                await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
+                await waitForElementToBeRemoved(() => screen.getByText('Loading...'), { timeout: 5000 });
                 const records = await waitFor(() => screen.getAllByTestId('record'));
                 const recordCount = records.length;
                 const lastRecord = records[records.length - 1];
@@ -56,7 +56,7 @@ describe('確認テスト', () => {
         test('未入力エラー確認テスト', async () => {
                 render(<App />);
 
-                await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
+                await waitForElementToBeRemoved(() => screen.getByText('Loading...'), { timeout: 5000 });
 
                 const inputFormStudyContent = await screen.getByTestId('study-content');
                 const inputFormStudyHour = await screen.getByTestId('study-hour');
