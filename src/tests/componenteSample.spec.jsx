@@ -1,7 +1,7 @@
 import { render, screen, waitFor, waitForElementToBeRemoved, act, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import supabase from '../utils/supabase';
+// import supabase from '../utils/supabase';
 
 describe('確認テスト', () => {
         test('投稿作成確認テスト', async () => {

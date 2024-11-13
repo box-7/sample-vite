@@ -1,9 +1,14 @@
-import { defineConfig } from 'vite';
+import {
+        defineConfig
+} from 'vite';
 import react from '@vitejs/plugin-react';
 import envCompatible from 'vite-plugin-env-compatible';
 
 export default defineConfig({
-  plugins: [react(), envCompatible({ prefix: 'VITE', mountedPath: 'process.env' })],
+        plugins: [react(), envCompatible({
+                prefix: 'VITE',
+                mountedPath: 'process.env'
+        })],
 });
 
 // import { defineConfig, loadEnv } from 'vite'

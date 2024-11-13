@@ -84,7 +84,7 @@ function App() {
 
         return (
                 <>
-                        <h1>学習記録一覧! 777</h1>
+                        <h1>学習記録一覧!</h1>
                         <p>
                                 <label htmlFor="study-content">学習内容</label>
                                 <input data-testid="study-content"  id="study-content" type="text" value={studyContent} onChange={handleChange} />

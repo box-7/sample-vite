@@ -1,4 +1,4 @@
-
+// createClient関数をインポート この関数を使ってSupabaseクライアントを作成
 import { createClient } from "@supabase/supabase-js";
 
 // supabaseのHPのAPISettingsから、ProjectURLとAPI Keysを取得
